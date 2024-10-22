@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:09 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/21 19:36:13 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/22 14:34:31 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,16 @@ void	setup_mutexes(t_data *data)
 	return ;
 }
 
-//todo
+void	init_philo(t_philo *philo, int i, t_data *data)
+{
+	philo->id = i;
+	philo->eaten = 0;
+	philo->time_last_meal = get_time();
+	philo->data = data;
+	pthread_mutex_init(&(philo->eaten_mutex), NULL);
+	pthread_mutex_init(&(philo->time_last_meal_mutex), NULL);
+}
+
 int	destroy_mutexes(t_data *data)
 {
 	int i;

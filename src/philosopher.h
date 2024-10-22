@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:16 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/21 19:40:23 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/22 14:35:50 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,31 +47,33 @@ typedef struct s_philo
 }				t_philo;
 
 // main.c
-int		exec(t_data *data);
-void	one_philo(t_data *data);
-void	multiple_philo(t_data *data);
-void	*prog();
+int				exec(t_data *data);
+void			one_philo(t_data *data);
+void			multiple_philo(t_data *data);
+void			*a_table(void *arg);
+long long int	get_time(void);
 
 // errors.c
-int	check_errors(int argc, char **argv);
-int	is_not_digit(char *argv);
+int				check_errors(int argc, char **argv);
+int				is_not_digit(char *argv);
 
 // utils.c
-void	ft_putstr_fd(char *str, int i);
-int		ft_strlen(char *str);
-int		ft_atoi(char *str);
+void			ft_putstr_fd(char *str, int i);
+int				ft_strlen(char *str);
+int				ft_atoi(char *str);
 
 // debug.c
-void	display_data(t_data *data);
+void			display_data(t_data *data);
 
 // philosopher.c
 
 //init.c
-void	setup_mutexes(t_data *data);
-void	setup_arg(t_data *data, char **argv);
-int		destroy_mutexes(t_data *data);
+void			setup_mutexes(t_data *data);
+void			setup_arg(t_data *data, char **argv);
+int				destroy_mutexes(t_data *data);
+void			init_philo(t_philo *philo, int i, t_data *data);
 
 //time.c
-long long get_time_diff(long long start_time);
-
+long long		get_time_diff(long long start_time);
+long long		get_time(void);
 #endif

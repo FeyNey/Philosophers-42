@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:07 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/21 19:39:56 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/22 14:40:31 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,48 @@ void	one_philo(t_data *data)
 		return (perror("Thread waiting error"));
 }
 
-int main(int argc, char **argv)
+void	ft_day(t_philo *philo, int left_fork, int right_fork)
 {
-	t_data	*data;
+	while (1)
+	{
+		ft_eat(philo, left_fork, right_fork);
+		ft_sleep(philo);
+		ft_think(philo, left_fork, right_fork);
+	}
+}
 
-	data = NULL;
-	if (check_errors(argc, argv + 1))
-		return (1);
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (1);
-	setup_arg(data, argv);
-	if (data->time_must_eat == 0)
-		return (free(data), 0);
-	exec(data);
-	return (free(data), 0);
+void	*a_table(void *arg)
+{
+	t_philo	*philo;
+	int left_fork;
+	int right_fork;
+
+	philo = (t_philo *)arg;
+	left_fork = philo->id;
+	right_fork = philo->id + 1;
+	if (right_fork == philo->data->nb_of_philo)
+		right_fork = 0;
+	ft_day(philo, left_fork, right_fork);
+	return (NULL);
+}
+
+void	multiple_philo(t_data *data)
+{
+	int i;
+	t_philo	*philo;
+
+	i = 0;
+	philo = malloc(sizeof(t_philo) * data->nb_of_philo);
+	if (!philo)
+		return ;
+	while (i < data->nb_of_philo)
+	{
+		init_philo(&(philo[i]), i, data);
+		if (pthread_create(&(philo[i].thread), NULL, &a_table, &(philo[i])))
+			return (perror("Error Creating Thread\n"));
+		usleep(200);
+		i++;
+	}
 }
 
 int	exec(t_data *data)
@@ -65,18 +92,19 @@ int	exec(t_data *data)
 	return (0);
 }
 
-void	*prog()
+int main(int argc, char **argv)
 {
-	int i;
+	t_data	*data;
 
-	i = 0;
-	i++;
-	printf("print i : %i", i);
-	return (NULL);
-}
-
-
-void	multiple_philo(t_data *data)
-{
-	(void)data;
+	data = NULL;
+	if (check_errors(argc, argv + 1))
+		return (1);
+	data = malloc(sizeof(t_data));
+	if (!data)
+		return (1);
+	setup_arg(data, argv);
+	if (data->time_must_eat == 0)
+		return (free(data), 0);
+	exec(data);
+	return (free(data), 0);
 }
