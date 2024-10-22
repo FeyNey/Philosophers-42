@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:07 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/22 14:40:31 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/22 22:38:52 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*one_philo_thread(void *arg)
 	pthread_mutex_lock(&(data->forks[0]));
 	printf("0\t1 has taken a fork\n");
 	usleep(data->time_to_die * 1000);
-	printf("%lld\t1 died\n", get_time_diff(data->start_time));
+	printf("%lld\t1 died\n", gtd(data->start_time));
 	pthread_mutex_unlock(&(data->forks[0]));
 	return (NULL);
 }
@@ -35,13 +35,63 @@ void	one_philo(t_data *data)
 		return (perror("Thread waiting error"));
 }
 
+void	print_status(char *msg, t_philo *philo)
+{
+	pthread_mutex_lock(&(philo->data->is_running_mutex));
+	if (philo->data->is_running)
+	{
+		pthread_mutex_lock(&(philo->data->start_time_mutex));
+		printf("%lld\t%i %s\n", gtd(philo->data->start_time), philo->id, msg);
+		pthread_mutex_unlock(&(philo->data->start_time_mutex));
+	}
+	pthread_mutex_unlock(&(philo->data->is_running_mutex));
+}
+
+long long	get_time_since(long long start_time)
+{
+	long long time;
+
+	time = get_time();
+	return (time - start_time);
+}
+
+void	waiting(long long time, int *is_alive, pthread_mutex_t mutex)
+{
+	long long	start_time;
+
+	start_time = get_time();
+	while ((get_time_since(start_time)) < time)
+	{
+		pthread_mutex_lock(&mutex);
+		if (!is_alive)
+		{
+			pthread_mutex_unlock(&mutex);
+			return ;
+		}
+		pthread_mutex_unlock(&mutex);
+		usleep(10);
+	}
+}
+
+void	ft_eat(t_philo *philo, int	left_fork, int right_fork)
+{
+	pthread_mutex_lock(&(philo->data->forks[left_fork]));
+	print_status("has taken a fork", philo);
+	pthread_mutex_lock(&(philo->data->forks[right_fork]));
+	print_status("has taken a fork", philo);
+	print_status("is eating", philo);
+	waiting(philo->data->time_to_eat, &(philo->data->is_running), philo->eaten_mutex);
+	pthread_mutex_unlock(&(philo->data->forks[left_fork]));
+	pthread_mutex_unlock(&(philo->data->forks[right_fork]));
+}
+
 void	ft_day(t_philo *philo, int left_fork, int right_fork)
 {
 	while (1)
 	{
 		ft_eat(philo, left_fork, right_fork);
-		ft_sleep(philo);
-		ft_think(philo, left_fork, right_fork);
+		// ft_sleep(philo);
+		// ft_think(philo, left_fork, right_fork);
 	}
 }
 
@@ -52,6 +102,7 @@ void	*a_table(void *arg)
 	int right_fork;
 
 	philo = (t_philo *)arg;
+	philo->data->is_running = 1;
 	left_fork = philo->id;
 	right_fork = philo->id + 1;
 	if (right_fork == philo->data->nb_of_philo)
@@ -77,6 +128,7 @@ void	multiple_philo(t_data *data)
 		usleep(200);
 		i++;
 	}
+	usleep(2000);
 }
 
 int	exec(t_data *data)

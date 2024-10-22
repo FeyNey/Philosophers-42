@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:16 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/22 14:35:50 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/22 22:36:01 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ typedef struct	s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_must_eat;
+	int				is_running;
 	long long int	start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	is_running_mutex;
-	pthread_mutex_t	start_time_mutex;
+	pthread_mutex_t	start_time_mutex; // call it is speaking mutex ??
 }					t_data;
 
 //philo
@@ -52,6 +53,12 @@ void			one_philo(t_data *data);
 void			multiple_philo(t_data *data);
 void			*a_table(void *arg);
 long long int	get_time(void);
+void			ft_day(t_philo *philo, int left_fork, int right_fork);
+void			ft_eat(t_philo *philo, int	left_fork, int right_fork);
+void			waiting(long long time, int *is_alive, pthread_mutex_t mutex);
+long long		get_time_since(long long start_time);
+void			print_status(char *msg, t_philo *philo);
+void			*a_table(void *arg);
 
 // errors.c
 int				check_errors(int argc, char **argv);
@@ -74,6 +81,6 @@ int				destroy_mutexes(t_data *data);
 void			init_philo(t_philo *philo, int i, t_data *data);
 
 //time.c
-long long		get_time_diff(long long start_time);
+long long		gtd(long long start_time);
 long long		get_time(void);
 #endif
