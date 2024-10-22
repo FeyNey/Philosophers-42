@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alexis <alexis@student.42.fr>              +#+  +:+       +#+         #
+#    By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/15 08:21:19 by alexis            #+#    #+#              #
-#    Updated: 2024/10/16 15:40:03 by alexis           ###   ########.fr        #
+#    Updated: 2024/10/21 19:27:15 by acoste           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			=	gcc
 
-CFLAGS		=	-g -Wall -Wextra -Werror
+CFLAGS		=	-g -Wall -Wextra -Werror -pthread
 
 NAME		=	philosopher
 
@@ -23,7 +23,8 @@ SRC_FILES	=	main.c\
 				errors.c\
 				utils.c\
 				debug.c\
-				init.c
+				init.c\
+				time.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 

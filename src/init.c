@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:09 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/16 15:44:15 by alexis           ###   ########.fr       */
+/*   Updated: 2024/10/21 19:36:13 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,52 @@
 
 void	setup_arg(t_data *data, char **argv)
 {
+	struct	timeval	time;
+
 	data->nb_of_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
 	if (argv[5])
-		data->nbr_must_eat = ft_atoi(argv[5]);
+		data->time_must_eat = ft_atoi(argv[5]);
 	else
-		data->nbr_must_eat = -1;
+		data->time_must_eat = -1;
+	if (gettimeofday(&time, NULL) == -1)
+		return(perror("gettimeofday error\n"));
+	data->start_time = time.tv_sec * 1000 + time.tv_usec / 1000;
 }
 
-void	init_mutex(t_data *data)
+void	setup_mutexes(t_data *data)
 {
 	int i;
 
 	i = 0;
+	pthread_mutex_init(&(data->start_time_mutex), NULL);
 	pthread_mutex_init(&(data->is_running_mutex), NULL);
-	pthread_mutex_init(&(data->forks), NULL);
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_of_philo);
+	if (!data->forks)
+		return ;
+	while (i < data->nb_of_philo)
+	{
+		pthread_mutex_init(&(data->forks[i]), NULL);
+		i++;
+	}
+	return ;
 }
 
-// fork pas bon;
-
-/*
-void	init_philo(t_philo *philo)
+//todo
+int	destroy_mutexes(t_data *data)
 {
+	int i;
 
+	i = 0;
+	pthread_mutex_destroy(&(data->is_running_mutex));
+	pthread_mutex_destroy(&(data->start_time_mutex));
+	while (i < data->nb_of_philo)
+	{
+		pthread_mutex_destroy(&(data->forks[i]));
+		i++;
+	}
+	free(data->forks);
+	return (0);
 }
-*/
