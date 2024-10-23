@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:07 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/22 22:38:52 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/23 17:31:20 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void	one_philo(t_data *data)
 		return (perror("Thread waiting error"));
 }
 
-void	print_status(char *msg, t_philo *philo)
+void	print_status(char *msg, t_philo *philo, int i)
 {
 	pthread_mutex_lock(&(philo->data->is_running_mutex));
 	if (philo->data->is_running)
 	{
 		pthread_mutex_lock(&(philo->data->start_time_mutex));
-		printf("%lld\t%i %s\n", gtd(philo->data->start_time), philo->id, msg);
+		printf("%lld\t%i %s[%i]\n", gtd(philo->data->start_time), philo->id, msg, i);
 		pthread_mutex_unlock(&(philo->data->start_time_mutex));
 	}
 	pthread_mutex_unlock(&(philo->data->is_running_mutex));
@@ -69,20 +69,32 @@ void	waiting(long long time, int *is_alive, pthread_mutex_t mutex)
 			return ;
 		}
 		pthread_mutex_unlock(&mutex);
-		usleep(10);
 	}
 }
 
 void	ft_eat(t_philo *philo, int	left_fork, int right_fork)
 {
-	pthread_mutex_lock(&(philo->data->forks[left_fork]));
-	print_status("has taken a fork", philo);
-	pthread_mutex_lock(&(philo->data->forks[right_fork]));
-	print_status("has taken a fork", philo);
-	print_status("is eating", philo);
-	waiting(philo->data->time_to_eat, &(philo->data->is_running), philo->eaten_mutex);
-	pthread_mutex_unlock(&(philo->data->forks[left_fork]));
-	pthread_mutex_unlock(&(philo->data->forks[right_fork]));
+	if ((philo->id % 2) == 1)
+	{
+		pthread_mutex_lock(&(philo->data->forks[left_fork]));
+		print_status("has taken a fork", philo, left_fork);
+		pthread_mutex_lock(&(philo->data->forks[right_fork]));
+		print_status("has taken a fork", philo, right_fork);
+		print_status("is eating", philo, 0);
+		waiting(philo->data->time_to_eat, &(philo->data->is_running), philo->eaten_mutex);
+		pthread_mutex_unlock(&(philo->data->forks[left_fork]));
+		pthread_mutex_unlock(&(philo->data->forks[right_fork]));
+	}
+	else
+	{
+		// usleep(philo->data->time_to_eat / 2);
+		pthread_mutex_lock(&(philo->data->forks[left_fork]));
+		print_status("has taken a fork", philo, left_fork);
+		pthread_mutex_lock(&(philo->data->forks[right_fork]));
+		print_status("has taken a fork", philo, right_fork);
+		print_status("is eating", philo, 0);
+		waiting(philo->data->time_to_eat, &(philo->data->is_running), philo->eaten_mutex);
+	}
 }
 
 void	ft_day(t_philo *philo, int left_fork, int right_fork)
@@ -103,11 +115,16 @@ void	*a_table(void *arg)
 
 	philo = (t_philo *)arg;
 	philo->data->is_running = 1;
-	left_fork = philo->id;
-	right_fork = philo->id + 1;
+	left_fork = philo->id - 1;
+	right_fork = philo->id;
+	print_status("<- thread lunch /", philo, 0);
 	if (right_fork == philo->data->nb_of_philo)
 		right_fork = 0;
-	ft_day(philo, left_fork, right_fork);
+	// printf("philo id : %i, left fork : %i, right fork : %i\n", philo->id, left_fork, right_fork);
+	while (1)
+	{
+		ft_day(philo, left_fork, right_fork);
+	}
 	return (NULL);
 }
 
@@ -125,10 +142,9 @@ void	multiple_philo(t_data *data)
 		init_philo(&(philo[i]), i, data);
 		if (pthread_create(&(philo[i].thread), NULL, &a_table, &(philo[i])))
 			return (perror("Error Creating Thread\n"));
-		usleep(200);
 		i++;
 	}
-	usleep(2000);
+	usleep(2000000);
 }
 
 int	exec(t_data *data)
@@ -149,14 +165,24 @@ int main(int argc, char **argv)
 	t_data	*data;
 
 	data = NULL;
-	if (check_errors(argc, argv + 1))
-		return (1);
+	if (argc == 1)
+	{
+		printf("Tes arguments du con\n");
+		return (0);
+	}
+	if (argv[1][0] != 'd')
+		if (check_errors(argc, argv + 1))
+			return (1);
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (1);
-	setup_arg(data, argv);
-	if (data->time_must_eat == 0)
-		return (free(data), 0);
+	if (argv[1][0] != 'd')
+		setup_arg(data, argv);
+	if (argv[1][0] != 'd')
+		if (data->time_must_eat == 0)
+			return (free(data), 0);
+	if (argv[1][0] == 'd')
+		setup_default(data);
 	exec(data);
 	return (free(data), 0);
 }

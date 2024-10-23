@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:16 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/22 22:36:01 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/23 16:15:37 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct s_philo
 	pthread_t		thread;
 	int				id;
 	int				eaten;
+	int				right_fork;
+	int				left_fork;
 	long long int	time_last_meal;
 	pthread_mutex_t	eaten_mutex;
 	pthread_mutex_t	time_last_meal_mutex;
@@ -57,8 +59,9 @@ void			ft_day(t_philo *philo, int left_fork, int right_fork);
 void			ft_eat(t_philo *philo, int	left_fork, int right_fork);
 void			waiting(long long time, int *is_alive, pthread_mutex_t mutex);
 long long		get_time_since(long long start_time);
-void			print_status(char *msg, t_philo *philo);
+void			print_status(char *msg, t_philo *philo, int i);
 void			*a_table(void *arg);
+void			setup_default(t_data *data);
 
 // errors.c
 int				check_errors(int argc, char **argv);
