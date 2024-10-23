@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:09 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/23 17:24:34 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/23 21:10:45 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	setup_default(t_data *data)
 {
 	struct timeval time;
 
-	data->nb_of_philo = 5;
+	data->nb_of_philo = 6;
 	data->time_to_die = 100;
 	data->time_to_eat = 350;
 	data->time_to_sleep = 500;

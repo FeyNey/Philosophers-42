@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:16 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/23 16:15:37 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/23 21:54:20 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 # include <string.h>
 # include <sys/time.h>
 # include <pthread.h>
+
+# define RED     "\x1b[31m"
+# define GREEN   "\x1b[32m"
+# define CYAN    "\x1b[36m"
+# define MAGENTA "\x1b[35m"
+# define YELLOW  "\x1b[33m"
+# define RESET   "\x1b[0m"
 
 //data
 typedef struct	s_data
@@ -56,7 +63,7 @@ void			multiple_philo(t_data *data);
 void			*a_table(void *arg);
 long long int	get_time(void);
 void			ft_day(t_philo *philo, int left_fork, int right_fork);
-void			ft_eat(t_philo *philo, int	left_fork, int right_fork);
+void			ft_take_your_sit(t_philo *philo, int	left_fork, int right_fork);
 void			waiting(long long time, int *is_alive, pthread_mutex_t mutex);
 long long		get_time_since(long long start_time);
 void			print_status(char *msg, t_philo *philo, int i);
