@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:16 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/23 21:54:20 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/28 21:51:41 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,17 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+# define BLU     "\e[0;34m"
 # define RED     "\x1b[31m"
 # define GREEN   "\x1b[32m"
 # define CYAN    "\x1b[36m"
 # define MAGENTA "\x1b[35m"
 # define YELLOW  "\x1b[33m"
 # define RESET   "\x1b[0m"
+
+# define BRED    "\e[1;31m"
+# define BGRN    "\e[1;32m"
+# define BBLU    "\e[1;34m"
 
 //data
 typedef struct	s_data
@@ -56,41 +61,47 @@ typedef struct s_philo
 	t_data			*data;
 }				t_philo;
 
-// main.c
-int				exec(t_data *data);
-void			one_philo(t_data *data);
-void			multiple_philo(t_data *data);
-void			*a_table(void *arg);
-long long int	get_time(void);
-void			ft_day(t_philo *philo, int left_fork, int right_fork);
-void			ft_take_your_sit(t_philo *philo, int	left_fork, int right_fork);
-void			waiting(long long time, int *is_alive, pthread_mutex_t mutex);
-long long		get_time_since(long long start_time);
-void			print_status(char *msg, t_philo *philo, int i);
-void			*a_table(void *arg);
-void			setup_default(t_data *data);
+//debbug.c
+void		display_data(t_data *data);
+void		print_status(char *msg, t_philo *philo, int i);
 
-// errors.c
-int				check_errors(int argc, char **argv);
-int				is_not_digit(char *argv);
-
-// utils.c
-void			ft_putstr_fd(char *str, int i);
-int				ft_strlen(char *str);
-int				ft_atoi(char *str);
-
-// debug.c
-void			display_data(t_data *data);
-
-// philosopher.c
+//errors.c
+int			is_not_digit(char *argv);
+int			check_errors(int argc, char **argv);
 
 //init.c
-void			setup_mutexes(t_data *data);
-void			setup_arg(t_data *data, char **argv);
-int				destroy_mutexes(t_data *data);
-void			init_philo(t_philo *philo, int i, t_data *data);
+void		setup_default(t_data *data);
+void		setup_arg(t_data *data, char **argv);
+void		setup_mutexes(t_data *data);
+void		destroy_mutexes(t_data *data);
+void		init_philo(t_philo *philo, int i, t_data *data);
+void		destroy_philo_mutexes(t_philo *philo, int nb_philo);
+void		wait_till_the_end(t_philo *philo, t_data *data);
+
+//main.c
+int			exec(t_data *data);
+void		multiple_philo(t_data *data);
+void		*a_table(void *arg);
+
+//orders.c
+void		ft_wait(long long time, int *is_running, pthread_mutex_t mutex);
+void		ft_eat(t_philo *philo);
+void		ft_sleep(t_philo *philo);
+void		ft_take_forks(t_philo *philo, int left_fork, int right_fork);
+
+//philosopher.c
+void		*one_philo_thread(void *arg);
+void		one_philo(t_data *data);
+
 
 //time.c
-long long		gtd(long long start_time);
-long long		get_time(void);
+long long	get_time(void);
+long long	get_time_since(long long start_time);
+
+//utils.c
+int			ft_strlen(char *str);
+void		ft_putstr_fd(char *str, int i);
+int			ft_atoi(char *str);
+int			ft_usleep(size_t milliseconds);
+
 #endif
