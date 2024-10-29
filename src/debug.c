@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 14:55:32 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/25 15:11:29 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:56:01 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,20 @@ void	print_status(char *msg, t_philo *philo, int i)
 	{
 		pthread_mutex_lock(&(philo->data->start_time_mutex));
 		if (i == 100)
-			printf(RED "%lld\t%i %s\n" RESET, get_time_since(philo->data->start_time), philo->id, msg);
+			printf(CYAN "%lld\t%i %s\n" RESET, \
+			get_time_since(philo->data->start_time), philo->id, msg);
 		else if (i == 200)
-			printf(GREEN "%lld\t%i %s\n" RESET, get_time_since(philo->data->start_time), philo->id, msg);
+			printf(GREEN "%lld\t%i %s\n" RESET, \
+			get_time_since(philo->data->start_time), philo->id, msg);
 		else if (i == 300)
-			printf(YELLOW "%lld\t%i %s\n" RESET, get_time_since(philo->data->start_time), philo->id, msg);
+			printf(YELLOW "%lld\t%i %s\n" RESET, \
+			get_time_since(philo->data->start_time), philo->id, msg);
+		else if (i == 400)
+			printf(YELLOW "%lld\t%i %s\n" RESET, \
+			get_time_since(philo->data->start_time), philo->id, msg);
 		else
-			printf("%lld\t%i %s[%i]\n", get_time_since(philo->data->start_time), philo->id, msg, i);
+			printf("%lld\t%i %s[%i]\n", \
+			get_time_since(philo->data->start_time), philo->id, msg, i);
 		pthread_mutex_unlock(&(philo->data->start_time_mutex));
 	}
 	pthread_mutex_unlock(&(philo->data->is_running_mutex));

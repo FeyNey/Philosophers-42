@@ -6,31 +6,15 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:39:09 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/28 22:20:28 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:57:32 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-void	setup_default(t_data *data)
-{
-	struct timeval time;
-
-	data->nb_of_philo = 4;
-	data->time_to_die = 310;
-	data->time_to_eat = 200;
-	data->time_to_sleep = 100;
-	data->time_must_eat = -1;
-	if (gettimeofday(&time, NULL) == -1)
-		return(perror("gettimeofday error\n"));
-	data->start_time = get_time();
-	display_data(data);
-	write (1, "\n", 1);
-}
-
 void	setup_arg(t_data *data, char **argv)
 {
-	struct	timeval	time;
+	struct timeval	time;
 
 	data->nb_of_philo = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
@@ -41,7 +25,7 @@ void	setup_arg(t_data *data, char **argv)
 	else
 		data->time_must_eat = -1;
 	if (gettimeofday(&time, NULL) == -1)
-		return(perror("gettimeofday error\n"));
+		return (perror("gettimeofday error\n"));
 	data->start_time = get_time();
 }
 
@@ -64,7 +48,6 @@ void	setup_mutexes(t_data *data)
 	int	i;
 
 	i = 0;
-
 	pthread_mutex_init(&(data->is_running_mutex), NULL);
 	pthread_mutex_init(&(data->start_time_mutex), NULL);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_of_philo);

@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:52:19 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/25 17:29:03 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:57:01 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_not_digit(char *argv)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (argv[0] == '-' || argv[0] == '+')
@@ -30,7 +30,7 @@ int	is_not_digit(char *argv)
 
 int	check_errors(int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	if (argc != 5 && argc != 6)
 	{
@@ -42,7 +42,7 @@ int	check_errors(int argc, char **argv)
 	i = 0;
 	while (i < (argc - 1))
 	{
-		if (is_not_digit(argv[i])) // only nbr except 'argv[i][0] who can also be '-' or '+'
+		if (is_not_digit(argv[i]))
 		{
 			ft_putstr_fd("Error : Arguments must all be numbers.\n", 2);
 			return (1);

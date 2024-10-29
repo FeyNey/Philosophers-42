@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 09:52:54 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/28 21:53:11 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:59:48 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int	ft_strlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
-	return(i);
+	return (i);
 }
 
 void	ft_putstr_fd(char *str, int i)
@@ -30,9 +30,9 @@ void	ft_putstr_fd(char *str, int i)
 
 int	ft_atoi(char *str)
 {
-	int i;
-	int sign;
-	int res;
+	int	i;
+	int	sign;
+	int	res;
 
 	i = 0;
 	sign = 1;

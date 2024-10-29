@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:55:55 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/25 15:33:42 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/29 14:58:54 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	*one_philo_thread(void *arg)
 {
-	t_data *data;
+	t_data	*data;
 
 	data = (t_data *)arg;
 	pthread_mutex_lock(&(data->forks[0]));
-	printf("0\t1 has taken a fork\n");
+	printf(YELLOW "0\t1 has taken a fork\n" RESET);
 	usleep(data->time_to_die * 1000);
-	printf("%lld\t1 died\n", get_time_since(data->start_time));
+	printf(RED "%lld\t1 died\n" RESET, get_time_since(data->start_time));
 	pthread_mutex_unlock(&(data->forks[0]));
 	return (NULL);
 }

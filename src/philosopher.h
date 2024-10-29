@@ -6,7 +6,7 @@
 /*   By: acoste <acoste@student.42perpignan.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 08:21:16 by alexis            #+#    #+#             */
-/*   Updated: 2024/10/28 21:51:41 by acoste           ###   ########.fr       */
+/*   Updated: 2024/10/29 15:25:14 by acoste           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,14 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-# define BLU     "\e[0;34m"
 # define RED     "\x1b[31m"
 # define GREEN   "\x1b[32m"
 # define CYAN    "\x1b[36m"
-# define MAGENTA "\x1b[35m"
 # define YELLOW  "\x1b[33m"
 # define RESET   "\x1b[0m"
 
-# define BRED    "\e[1;31m"
-# define BGRN    "\e[1;32m"
-# define BBLU    "\e[1;34m"
-
 //data
-typedef struct	s_data
+typedef struct s_data
 {
 	int				nb_of_philo;
 	int				time_to_die;
@@ -79,20 +73,22 @@ void		destroy_philo_mutexes(t_philo *philo, int nb_philo);
 void		wait_till_the_end(t_philo *philo, t_data *data);
 
 //main.c
+void		stop_running(t_data *data);
+void		wait_till_the_end(t_philo *philo, t_data *data);
 int			exec(t_data *data);
 void		multiple_philo(t_data *data);
 void		*a_table(void *arg);
 
 //orders.c
-void		ft_wait(long long time, int *is_running, pthread_mutex_t mutex);
+int			ft_wait(long long time, t_data *data);
+void		ft_take_forks(t_philo *philo, int left_fork, int right_fork);
 void		ft_eat(t_philo *philo);
 void		ft_sleep(t_philo *philo);
-void		ft_take_forks(t_philo *philo, int left_fork, int right_fork);
+void		ft_died(t_data *data, t_philo *philo);
 
 //philosopher.c
 void		*one_philo_thread(void *arg);
 void		one_philo(t_data *data);
-
 
 //time.c
 long long	get_time(void);
